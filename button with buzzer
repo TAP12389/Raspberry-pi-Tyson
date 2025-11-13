@@ -1,0 +1,10 @@
+from machine import Pin
+from time import sleep
+
+
+buzzer = Pin(1, Pin.OUT)
+btn = Pin(0, Pin.IN, Pin.PULL_UP)
+
+while True:
+    buzzer.value(not btn.value())
+    print(btn.value())
