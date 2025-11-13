@@ -1,0 +1,75 @@
+from machine import ADC
+from machine import Pin, PWM
+from time import sleep
+import machine
+import time
+
+ledR = PWM(Pin(0, Pin.OUT)) #stating the R in the RGB light
+
+ledG = PWM(Pin(1, Pin.OUT)) #stating the G in the RGB light
+
+btn = Pin(4, Pin.IN, Pin.PULL_UP) #stating the button
+buzzer = Pin(3, Pin.OUT) # stating the avtive buzzer
+
+ledr1 = Pin(5, Pin.OUT) # states the rest of leds
+
+ledr2 = Pin(6, Pin.OUT)
+
+ledr3 = Pin(7, Pin.OUT)
+
+ledb1 = Pin(8, Pin.OUT)
+
+ledb2 = Pin(9, Pin.OUT)
+
+potentiometer = machine.ADC(26) # States potentiometer
+
+
+
+
+ledR.freq(1000)
+ledG.freq(1000)
+
+while True:
+    while btn.value() == 1:
+        ledR.duty_u16(0)
+        ledG.duty_u16(0)
+        ledr1.off()
+        ledr2.off()
+        ledr3.off()
+        ledb1.off()
+        ledb2.off()
+        buzzer.low()
+    while btn.value() == 0:
+        value = potentiometer.read_u16()
+        print(value)
+        ledR.duty_u16(value)
+        ledG.duty_u16(65535 - value)
+        if value == 65535:
+            buzzer.high()
+            ledr1.on()
+            sleep(0.25)
+            buzzer.low()
+            sleep(0.25)
+            buzzer.high()
+            ledr2.on()
+            sleep(0.25)
+            buzzer.low()
+            sleep(0.25)
+            buzzer.high()
+            ledr3.on()
+            sleep(0.25)
+            buzzer.low()
+            sleep(0.25)
+            ledb1.on()
+            ledb2.on()
+            buzzer.high()
+
+
+        else:
+            ledr1.off()
+            ledr2.off()
+            ledr3.off()
+            ledb1.off()
+            ledb2.off()
+            buzzer.low()
+    time.sleep(0.01)
