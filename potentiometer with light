@@ -1,0 +1,14 @@
+from machine import ADC
+from machine import Pin, PWM
+from time import sleep
+import machine
+
+
+potentiometer = machine.ADC(26)
+led = PWM(Pin(0, Pin.OUT))
+led.freq(1000)
+
+while True:
+    value = potentiometer.read_u16()
+    print(value)
+    led.duty_u16(value)
